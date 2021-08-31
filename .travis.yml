@@ -1,1 +1,5 @@
+language: javscript
+rvm:
+ - 16.x
+ - node
 npm install
