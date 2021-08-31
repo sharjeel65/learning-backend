@@ -1,1 +1,1 @@
-[![Coverage Status](https://coveralls.io/repos/github/Koinstreet/learning-backend/badge.svg?branch=master)](https://coveralls.io/github/Koinstreet/learning-backend?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sharjeel65/learning-backend/badge.svg?branch=master)](https://coveralls.io/github/sharjeel65/learning-backend?branch=master)
