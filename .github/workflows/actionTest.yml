@@ -1,32 +1,37 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+on: ["push","pull_request"]
 
-name: Node.js CI
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+name: build
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+        test_number:
+          - 1
+          - 2
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: npm run coverage
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          version: 10.x
+      - run: npm install
+      - run: npm run coverage-${{ matrix.test_number }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@v1.1.0
+        env:
+          NODE_COVERALLS_DEBUG: 1
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel: true
+          flag-name: run-${{ matrix.test_number }}
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v1.1.0
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
